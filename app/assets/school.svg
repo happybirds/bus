@@ -1,0 +1,13 @@
+<?xml version="1.0"?><svg width="640" height="480" xmlns="http://www.w3.org/2000/svg">
+ <title>Red House</title>
+ <g>
+  <rect height="112.99" width="68.2011" y="80.76" x="203.229" stroke-width="12.5" stroke="#000000" fill-rule="evenodd" fill="#ff0000" id="rect604"/>
+  <rect height="210.177" width="299.43" y="237.705" x="177.825" stroke-width="12.5" stroke="#000000" fill-rule="evenodd" fill="#ff0000" id="rect590"/>
+  <rect height="161.725" width="97.8905" y="285.164" x="336.177" stroke-width="12.5" stroke="#000000" fill-rule="evenodd" fill="#f93939" id="rect592"/>
+  <rect height="77.7366" width="77.7366" y="303.708" x="216.693" stroke-width="12.5" stroke="#000000" fill-rule="evenodd" fill="#ffffff" id="rect593"/>
+  <path d="m256.649994,305.721985l0,71.255005" stroke-width="12.5" stroke="#000000" fill-rule="evenodd" fill-opacity="0.75" fill="none" id="path594"/>
+  <path d="m292.278015,341.348999l-71.25502,0" stroke-width="12.5" stroke="#000000" fill-rule="evenodd" fill-opacity="0.75" fill="none" id="path595"/>
+  <path d="m146.225006,252.751007l363.399994,0l-183.876007,-179.155304l-179.523987,179.155304z" stroke-width="12.5" stroke="#000000" fill-rule="evenodd" fill="#000007" id="path602"/>
+  <title>Layer 1</title>
+ </g>
+</svg>

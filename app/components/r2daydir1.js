@@ -2,30 +2,35 @@ import * as React from 'react';
 import {View,Text,Image,FlatList, DetailsHeadItem,ActivityIndicator,StyleSheet,TouchableOpacity  } from 'react-native';
 import {url as appUrl} from '../../app.json';
 export default class R2daydir1 extends React.Component {
+   _isMounted = false;
   constructor(props){
     super(props);
     this.state ={
       isLoading: true,
-      path: ''
+      path: '0'
 
     }
   }
 
   componentWillUnmount() {
+     this._isMounted = false;
     this.timer && clearTimeout(this.timer);
   }
 
   componentDidMount(){
+    this._isMounted = true;
     this.timer = setInterval(() => {
     return fetch(appUrl + "/api/v1/r2daydir1")
       .then((response) => response.json())
       .then((responseJson) => {
+      if (this._isMounted) {
         this.setState({
           isLoading: false,
           dataSource: responseJson.result,
           path: responseJson.bus
         }, function(){
         });
+      }
       })
       .catch((error) =>{
         console.error(error);
@@ -33,7 +38,20 @@ export default class R2daydir1 extends React.Component {
   }
 
    Cellheader(data){
-     alert(data.name.split('_')[0]);
+     // alert(data.name.split('_')[0]);
+const board_id = 650
+     fetch(appUrl + "/api/v1/timer",{method:'POST',body: JSON.stringify({board_id})})
+       .then((response) => response.json())
+       .then((responseJson) => {
+    console.log(responseJson)
+       })
+       .catch((error) =>{
+         console.error(error);
+       })
+
+
+
+
    }
 
    renderItemView({item,index}){
@@ -47,7 +65,8 @@ export default class R2daydir1 extends React.Component {
                 <View style={{ height:30,justifyContent: 'center', alignItems: 'flex-start'}}>
                   <Text style={{color: 'red'}}>
                     <Image style={{width:20,height: 20}} source={require('../assets/bus.png')}></Image>
-                    {item.name.split('_')[0]}
+                    {(item.name.split('_')[0] == 'Charlottetown Mall Shelters') || (item.name.split('_')[0] == 'Beach Grove & Scott') ? <Text style={{color: 'green'}}><Image style={{width:20,height: 20}} source={require('../assets/home.png')}></Image> {item.name.split('_')[0]}</Text> : <Text>{item.name.split('_')[0]}</Text> }
+
                   </Text>
                 </View>
            </TouchableOpacity>
@@ -57,9 +76,7 @@ export default class R2daydir1 extends React.Component {
            <TouchableOpacity style={{flex:1, height:30,width:'100%' }}
               onPress={()=>{this.Cellheader(item)}} >
               <View style={{ height:30,justifyContent: 'center', alignItems: 'flex-start'}}>
-                <Text>
-                  {item.name.split('_')[0]}
-                </Text>
+                {(item.name.split('_')[0] == 'Charlottetown Mall Shelters') || (item.name.split('_')[0] == 'Beach Grove & Scott') ? <Text style={{color: 'green'}}><Image style={{width:20,height: 20}} source={require('../assets/home.png')}></Image> {item.name.split('_')[0]}</Text> : <Text>{item.name.split('_')[0]}</Text> }
               </View>
           </TouchableOpacity>
         );
@@ -69,7 +86,7 @@ export default class R2daydir1 extends React.Component {
 
    ListHeaderComponent(){
      return(
-       <View style={{height:40,justifyContent: 'center'}}>
+       <View style={{height:20,justifyContent: 'center'}}>
         <TouchableOpacity style={{color: 'red',  borderBottomWidth: 1,
           borderBottomColor:'#eee'}}>
           <Text>R2</Text>
@@ -95,7 +112,7 @@ export default class R2daydir1 extends React.Component {
          data={this.state.dataSource}
          ListHeaderComponent={this.ListHeaderComponent.bind(this)}
          renderItem={this.renderItemView.bind(this)}
-         keyExtractor={(item, index) => item.id}
+         keyExtractor={(item, index) => item.id.toString()}
        />
      </View>
    );

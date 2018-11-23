@@ -85,9 +85,9 @@ export default class Sidebar extends React.Component {
       <View >
          <Image style={styles.image} source={require('../../assets/bus.png')}></Image>
          {
-           routes.map( e=>(
-             <TouchableOpacity style={styles.link} onPress={_=> this.navigate(e.route,{user: e.index})}>
-               <Text>{e.title}[{e.count}]</Text>
+           routes.map( (e,i)=>(
+             <TouchableOpacity key={i} style={styles.link} onPress={_=> this.navigate(e.route,{user: e.index})}>
+               <Text key={i}>{e.title}[{e.count}]</Text>
              </TouchableOpacity>
            ))
          }

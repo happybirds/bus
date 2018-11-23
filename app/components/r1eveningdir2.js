@@ -2,30 +2,35 @@ import * as React from 'react';
 import {View,Text,Image,FlatList, DetailsHeadItem,ActivityIndicator,StyleSheet,TouchableOpacity  } from 'react-native';
 import {url as appUrl} from '../../app.json';
 export default class R1eveningdir2 extends React.Component {
+   _isMounted = false;
   constructor(props){
     super(props);
     this.state ={
       isLoading: true,
-      path: ''
+      path: '0'
 
     }
   }
 
   componentWillUnmount() {
+     this._isMounted = false;
     this.timer && clearTimeout(this.timer);
   }
 
   componentDidMount(){
+    this._isMounted = true;
     this.timer = setInterval(() => {
     return fetch(appUrl + "/api/v1/r1eveningdir2")
       .then((response) => response.json())
       .then((responseJson) => {
-        this.setState({
-          isLoading: false,
-          dataSource: responseJson.result,
-          path: responseJson.bus
-        }, function(){
-        });
+        if (this._isMounted) {
+          this.setState({
+            isLoading: false,
+            dataSource: responseJson.result,
+            path: responseJson.bus
+          }, function(){
+          });
+        }
       })
       .catch((error) =>{
         console.error(error);
@@ -47,7 +52,7 @@ export default class R1eveningdir2 extends React.Component {
                 <View style={{ height:30,justifyContent: 'center', alignItems: 'flex-start'}}>
                   <Text style={{color: 'red'}}>
                     <Image style={{width:20,height: 20}} source={require('../assets/bus.png')}></Image>
-                    {item.reverse_name.split('_')[0]}
+                    {(item.reverse_name.split('_')[0] == 'University & UPEI') ? <Text style={{color: 'green'}}>*{item.reverse_name.split('_')[0]}</Text> : <Text>{item.reverse_name.split('_')[0]}</Text> }
                   </Text>
                 </View>
            </TouchableOpacity>
@@ -57,9 +62,7 @@ export default class R1eveningdir2 extends React.Component {
            <TouchableOpacity style={{flex:1, height:30 }}
               onPress={()=>{this.Cellheader(item)}} >
               <View style={{ height:30,justifyContent: 'center', alignItems: 'flex-start'}}>
-                <Text>
-                  {item.reverse_name.split('_')[0]}
-                </Text>
+              {(item.reverse_name.split('_')[0] == 'University & UPEI') ? <Text style={{color: 'green'}}>*{item.reverse_name.split('_')[0]}</Text> : <Text>{item.reverse_name.split('_')[0]}</Text> }
               </View>
           </TouchableOpacity>
         );
@@ -69,7 +72,7 @@ export default class R1eveningdir2 extends React.Component {
 
    ListHeaderComponent(){
      return(
-       <View style={{height:40,justifyContent: 'center'}}>
+       <View style={{height:20,justifyContent: 'center'}}>
         <TouchableOpacity style={{color: 'red',  borderBottomWidth: 1,
           borderBottomColor:'#eee'}}>
           <Text>R1 Charlottetown Mall to Downtown</Text>
@@ -94,7 +97,7 @@ export default class R1eveningdir2 extends React.Component {
          data={this.state.dataSource}
          ListHeaderComponent={this.ListHeaderComponent.bind(this)}
          renderItem={this.renderItemView.bind(this)}
-         keyExtractor={(item, index) => item.id}
+         keyExtractor={(item, index) => item.id.toString()}
        />
      </View>
    );
