@@ -34,16 +34,37 @@ export default class R2daydir1 extends React.Component {
       })
       .catch((error) =>{
         console.error(error);
-      })},1000)
+      })},5000)
   }
 
    Cellheader(data){
      // alert(data.name.split('_')[0]);
-const board_id = 650
-     fetch(appUrl + "/api/v1/timer",{method:'POST',body: JSON.stringify({board_id})})
+
+     const ary=[];
+     const ary_now = []
+
+     const hour =   new Date().getHours()
+     const minute =   new Date().getMinutes()
+
+     fetch(appUrl + "/api/v1/timer?board_id="+data)
        .then((response) => response.json())
        .then((responseJson) => {
-    console.log(responseJson)
+
+        responseJson.times.map((e,i)=>{
+            ary.push(e.hour+':'+e.minute+e.ampm)
+            if( e.hour == hour && minute <= e.minute){
+              ary_now.push(e.hour+':'+e.minute+e.ampm)
+            }else if(hour >12 && e.hour == hour-12 && minute <= e.minute){
+              ary_now.push(e.hour+':'+e.minute+e.ampm)
+            }
+
+        })
+
+        alert(
+            '\n next time: \n' + ary_now[0]+'\n\n' +'all time: \n'+ary
+        )
+
+
        })
        .catch((error) =>{
          console.error(error);
@@ -61,7 +82,7 @@ const board_id = 650
        {
          return(
             <TouchableOpacity style={{flex:1, height:30,width:'100%' }}
-              onPress={()=>{this.Cellheader(item)}} >
+              onPress={()=>{this.Cellheader(item.id)}} >
                 <View style={{ height:30,justifyContent: 'center', alignItems: 'flex-start'}}>
                   <Text style={{color: 'red'}}>
                     <Image style={{width:20,height: 20}} source={require('../assets/bus.png')}></Image>
@@ -74,7 +95,7 @@ const board_id = 650
      }else{
        return(
            <TouchableOpacity style={{flex:1, height:30,width:'100%' }}
-              onPress={()=>{this.Cellheader(item)}} >
+              onPress={()=>{this.Cellheader(item.id)}} >
               <View style={{ height:30,justifyContent: 'center', alignItems: 'flex-start'}}>
                 {(item.name.split('_')[0] == 'Charlottetown Mall Shelters') || (item.name.split('_')[0] == 'Beach Grove & Scott') ? <Text style={{color: 'green'}}><Image style={{width:20,height: 20}} source={require('../assets/home.png')}></Image> {item.name.split('_')[0]}</Text> : <Text>{item.name.split('_')[0]}</Text> }
               </View>
